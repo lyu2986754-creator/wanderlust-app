@@ -1,0 +1,13 @@
+{
+  "name": "Wanderlust",
+  "description": "漫游 - 一个连接全球旅人的高品质社交社区。探索隐藏目的地，分享旅行攻略，连接志同道合的探险家。",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "social",
+    "travel",
+    "photography"
+  ]
+}
+
