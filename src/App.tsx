@@ -85,20 +85,24 @@ export default function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-accent/20 selection:text-accent">
-        <div className="max-w-[430px] mx-auto min-h-screen relative shadow-[0_0_100px_rgba(0,0,0,0.05)]">
-          <AnimatePresence mode="wait">
-            <Routes>
-              <Route path="/" element={<Home posts={appPosts} />} />
-              <Route path="/community" element={<Community posts={appPosts} onOpenShare={() => setIsShareModalOpen(true)} />} />
-              <Route path="/profile" element={<Profile user={user} posts={appPosts} onLogout={handleLogout} />} />
-              <Route path="/auth" element={user ? <Navigate to="/profile" /> : <Auth onLogin={handleLogin} />} />
-              <Route path="/post/:id" element={<PostDetail posts={appPosts} onAddComment={handleAddComment} />} />
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </AnimatePresence>
+      <div className="h-screen w-screen bg-slate-100 flex items-center justify-center p-0 sm:p-4">
+        <div className="w-full max-w-[430px] h-full sm:h-[92vh] bg-white relative shadow-[0_0_100px_rgba(0,0,0,0.1)] sm:rounded-[3rem] overflow-hidden flex flex-col border border-slate-200/50">
+          <div className="flex-1 overflow-y-auto no-scrollbar">
+            <AnimatePresence mode="wait">
+              <Routes>
+                <Route path="/" element={<Home posts={appPosts} />} />
+                <Route path="/community" element={<Community posts={appPosts} onOpenShare={() => setIsShareModalOpen(true)} />} />
+                <Route path="/profile" element={<Profile user={user} posts={appPosts} onLogout={handleLogout} />} />
+                <Route path="/auth" element={user ? <Navigate to="/profile" /> : <Auth onLogin={handleLogin} />} />
+                <Route path="/post/:id" element={<PostDetail posts={appPosts} onAddComment={handleAddComment} />} />
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </AnimatePresence>
+          </div>
           
-          <BottomNav />
+          <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
+            <BottomNav />
+          </div>
         </div>
       </div>
     </Router>

@@ -21,8 +21,8 @@ const PostDetail: React.FC<PostDetailProps> = ({ posts, onAddComment }) => {
   if (!post) return <div className="p-20 text-center">文章未找到</div>;
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 flex justify-between items-center p-6 mix-blend-difference">
+    <div className="flex flex-col min-h-screen bg-white relative">
+      <div className="absolute top-0 left-0 w-full z-50 flex justify-between items-center p-6 mix-blend-difference">
         <button onClick={() => navigate(-1)} className="p-2 text-white hover:bg-white/10 rounded-full transition-colors">
           <ArrowLeft size={24} />
         </button>
@@ -101,7 +101,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ posts, onAddComment }) => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-6 bg-white/80 backdrop-blur-2xl border-t border-slate-50 z-50">
+      <div className="absolute bottom-0 left-0 w-full p-6 bg-white/80 backdrop-blur-2xl border-t border-slate-50 z-50">
         <div className="max-w-md mx-auto flex items-center gap-3 bg-slate-50 border border-slate-100 rounded-full px-6 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.03)] focus-within:bg-white transition-all focus-within:ring-4 focus-within:ring-blue-500/10">
           <input 
             type="text" 
