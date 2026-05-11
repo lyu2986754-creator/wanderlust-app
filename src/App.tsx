@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Auth from './pages/Auth';
 import PostDetail from './pages/PostDetail';
 import DestinationDetail from './pages/DestinationDetail';
+import Explore from './pages/Explore';
 
 // Components
 import BottomNav from './components/BottomNav';
@@ -91,8 +92,9 @@ export default function App() {
           <div className="flex-1 overflow-y-auto no-scrollbar">
             <AnimatePresence mode="wait">
               <Routes>
-                <Route path="/" element={<Home posts={appPosts} />} />
-                <Route path="/community" element={<Community posts={appPosts} onOpenShare={() => setIsShareModalOpen(true)} />} />
+              <Route path="/" element={<Home posts={appPosts} />} />
+              <Route path="/explore" element={<Explore />} />
+              <Route path="/community" element={<Community posts={appPosts} onOpenShare={() => setIsShareModalOpen(true)} />} />
                 <Route path="/profile" element={<Profile user={user} posts={appPosts} onLogout={handleLogout} />} />
                 <Route path="/auth" element={user ? <Navigate to="/profile" /> : <Auth onLogin={handleLogin} />} />
                 <Route path="/post/:id" element={<PostDetail posts={appPosts} onAddComment={handleAddComment} />} />

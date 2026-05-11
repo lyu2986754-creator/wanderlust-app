@@ -6,7 +6,7 @@ export const DESTINATIONS: Destination[] = [
     name: '巴厘岛',
     country: '印尼',
     image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1000&auto=format&fit=crop',
-    tags: ['#海岛', '#文化'],
+    tags: ['#海岛', '#文化', '#自然'],
     explorers: '1.2万',
     is_trending: true
   },
@@ -15,15 +15,40 @@ export const DESTINATIONS: Destination[] = [
     name: '巴黎',
     country: '法国',
     image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1000&auto=format&fit=crop',
-    tags: ['#浪漫', '#艺术'],
+    tags: ['#浪漫', '#艺术', '#都市'],
     explorers: '9.8k'
+  },
+  {
+    id: 'tokyo',
+    name: '东京',
+    country: '日本',
+    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1000&auto=format&fit=crop',
+    tags: ['#都市', '#美食', '#文化'],
+    explorers: '2.5万',
+    is_trending: true
+  },
+  {
+    id: 'santorini',
+    name: '圣托里尼',
+    country: '希腊',
+    image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=80&w=1000&auto=format&fit=crop',
+    tags: ['#海岛', '#浪漫', '#自然'],
+    explorers: '8.2k'
+  },
+  {
+    id: 'kyoto',
+    name: '京都',
+    country: '日本',
+    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1000&auto=format&fit=crop',
+    tags: ['#文化', '#历史', '#自然'],
+    explorers: '1.1万'
   },
   {
     id: 'dubai',
     name: '迪拜',
     country: '阿联酋',
     image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1000&auto=format&fit=crop',
-    tags: ['#奢华', '#现代'],
+    tags: ['#奢华', '#现代', '#都市'],
     explorers: '1.5万'
   }
 ];

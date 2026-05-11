@@ -69,10 +69,11 @@ const DestinationDetail: React.FC = () => {
           </div>
           
           <button 
+            onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dest.name + ' ' + dest.country)}`, '_blank')}
             className="w-full bg-slate-900 text-white p-5 rounded-[2rem] font-display font-bold flex items-center justify-center gap-3 hover:bg-slate-800 transition-all active:scale-[0.98] shadow-xl"
           >
             <Navigation size={22} fill="currentColor" />
-            <span>地图导航 & 寻找目的地</span>
+            <span>谷歌地图导航 & 开启旅程</span>
           </button>
         </div>
 
