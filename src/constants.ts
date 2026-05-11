@@ -25,7 +25,7 @@ export const DESTINATIONS: Destination[] = [
 
 ---
 
-### 二、3日行程（轻松版）
+### 二通、3日行程（轻松版）
 #### Day1：老城文脉·红色记忆（免费为主）
 - **上午**：八一广场（免费）→八一起义纪念馆（免费，预约）
 - **中午**：羊子巷/系马桩吃地道午餐（南昌拌粉+瓦罐汤）
@@ -74,17 +74,40 @@ export const DESTINATIONS: Destination[] = [
 ---
 
 ### 一、行前必看
-- **最佳时间**：春秋两季
-- **交通**：地铁非常发达，建议使用北京一卡通App
-- **预约**：故宫需提前7天预约，极其火爆`,
+- **最佳时间**：春秋两季（9-10月气候最宜人）
+- **交通**：地铁网络极其发达，建议下载“北京一卡通”App
+- **预约**：**故宫**需提前7天预约，**毛主席纪念堂、国家博物馆**需提前预约
+
+---
+
+### 二、4日行程建议
+#### Day1：皇城初见
+- 天安门广场看升旗 → 故宫博物院（深度游）→ 景山公园（俯瞰故宫全景）→ 王府井
+
+#### Day2：长城好汉
+- 八达岭/慕田峪长城（建议早去避开人流）→ 奥林匹克公园（鸟巢/水立方夜景）
+
+#### Day3：园林韵味
+- 颐和园（昆明湖泛舟）→ 圆明园遗址 → 清华/北大校园（需预约）
+
+#### Day4：胡同慢生活
+- 雍和宫祈福 → 国子监 → 什刹海胡同Citywalk → 烟袋斜街`,
     attractions: [
       {
         id: 'gg',
         destination_id: 'beijing',
         name: '故宫博物院',
         image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=600',
-        description: '明清两代的皇家宫殿，世界上现存规模最大、保存最为完整的木质结构古建筑之一。',
+        description: '明清两代的皇家宫殿，感受震撼的历史厚重感。',
         info: '门票: 60元(旺季) | 需实名预约'
+      },
+      {
+        id: 'cc',
+        destination_id: 'beijing',
+        name: '八达岭长城',
+        image: 'https://images.unsplash.com/photo-1541144143000-cd9473a60ed3?q=80&w=600',
+        description: '不到长城非好汉，感受世界奇迹的宏伟。',
+        info: '门票: 40元 | 建议乘坐S2线/高铁直达'
       }
     ]
   },
@@ -95,8 +118,39 @@ export const DESTINATIONS: Destination[] = [
     image: 'https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?q=80&w=1000&auto=format&fit=crop',
     tags: ['#魔都', '#外滩', '#迪士尼'],
     explorers: '80万+',
+    is_trending: true,
     description: `### 上海3日摩登之旅
-**核心亮点**：外滩夜景、武康路漫步、陆家嘴三件套。`
+**核心亮点**：外滩夜景、武康路漫步、陆家嘴三件套、迪士尼乐园。
+
+---
+
+### 一、行程安排
+#### Day1：海派风情
+- 武康路（Citywalk起点）→ 安福路 → 淮海中路 → 南京路步行街 → 外滩（看夜景）
+
+#### Day2：魔都高度
+- 陆家嘴（上海中心/东方明珠）→ 豫园 → 城隍庙 → 艺术展（西岸美术馆/浦东美术馆）
+
+#### Day3：童话世界
+- 全天：上海迪士尼度假区（建议提前下载App看排队时间）`,
+    attractions: [
+      {
+        id: 'wt',
+        destination_id: 'shanghai',
+        name: '外滩',
+        image: 'https://images.unsplash.com/photo-1512236258305-32fb110fcbc2?q=80&w=600',
+        description: '上海的地标，看万国建筑群与陆家嘴现代奇迹隔江对望。',
+        info: '门票: 免费 | 最佳观赏时间: 19:00-22:00'
+      },
+      {
+        id: 'dns',
+        destination_id: 'shanghai',
+        name: '上海迪士尼',
+        image: 'https://images.unsplash.com/photo-1505995433366-e12047f3f144?q=80&w=600',
+        description: '中国内地首座迪士尼乐园，体验奇妙的童话旅程。',
+        info: '门票: 475元起 | 需提前购票'
+      }
+    ]
   },
   {
     id: 'chengdu',
@@ -106,7 +160,64 @@ export const DESTINATIONS: Destination[] = [
     tags: ['#慢生活', '#大熊猫', '#川菜美食'],
     explorers: '60万+',
     description: `### 成都4日慢生活体验
-**核心亮点**：熊猫基地、宽窄巷子、火锅盛宴、青城山。`
+**核心亮点**：熊猫基地看“花花”、宽窄巷子吃火锅、玉林路的小酒馆、青城山避暑。
+
+---
+
+### 一、行程建议
+#### Day1：萌宠与老街
+- 成都大熊猫繁育研究基地（建议8点前到）→ 文殊院 → 宽窄巷子
+
+#### Day2：市井生活
+- 人民公园（喝盖碗茶/掏耳朵）→ 武侯祠 → 锦里 → 九眼桥酒吧街
+
+#### Day3：文艺时光
+- 熊猫书店 → 太古里/春熙路（打卡大熊猫爬墙）→ 玉林路生活圈
+
+#### Day4：问道青城
+- 青城山或都江堰一日游`,
+    attractions: [
+      {
+        id: 'xm',
+        destination_id: 'chengdu',
+        name: '大熊猫繁育基地',
+        image: 'https://images.unsplash.com/photo-1564349683136-77e08bef1ed1?q=80&w=600',
+        description: '来看国宝大熊猫，尤其是顶流“花花”。',
+        info: '门票: 55元 | 需提前在官方公众号预约'
+      }
+    ]
+  },
+  {
+    id: 'xian',
+    name: '西安',
+    country: '中国',
+    image: 'https://images.unsplash.com/photo-1524316212875-f855e3e34a62?q=80&w=1000&auto=format&fit=crop',
+    tags: ['#长安城', '#秦始皇陵', '#碳水天堂'],
+    explorers: '70万+',
+    description: `### 西安3日古都穿越
+**核心亮点**：兵马俑、西安城墙骑行、大唐不夜城、回民街美食。
+
+---
+
+### 一、行程安排
+#### Day1：历史厚重
+- 陕西历史博物馆 → 西安城墙（南门进）→ 碑林博物馆 → 书院门
+
+#### Day2：奇迹见证
+- 秦始皇兵马俑博物馆 → 华清宫 → 长恨歌演出（需提前订票）
+
+#### Day3：人间烟火
+- 钟鼓楼 → 回民街/洒金桥（狂吃）→ 大雁塔北广场音乐喷泉 → 大唐不夜城`,
+    attractions: [
+      {
+        id: 'bmy',
+        destination_id: 'xian',
+        name: '兵马俑博物馆',
+        image: 'https://images.unsplash.com/photo-1599889959407-598566c6e1f1?q=80&w=600',
+        description: '世界第八大奇迹，感受大秦帝国的雄壮军阵。',
+        info: '门票: 120元 | 建议请讲解员'
+      }
+    ]
   }
 ];
 
