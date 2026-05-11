@@ -2,21 +2,46 @@ import { Destination, Post, Comment } from './types';
 
 export const DESTINATIONS: Destination[] = [
   {
+    id: 'beijing',
+    name: '北京',
+    country: '中国',
+    image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=1000&auto=format&fit=crop',
+    tags: ['#文化', '#历史', '#必打卡'],
+    explorers: '50万+',
+    is_trending: true
+  },
+  {
+    id: 'shanghai',
+    name: '上海',
+    country: '中国',
+    image: 'https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?q=80&w=1000&auto=format&fit=crop',
+    tags: ['#都市', '#时尚', '#美食'],
+    explorers: '45万+',
+    is_trending: true
+  },
+  {
+    id: 'chengdu',
+    name: '成都',
+    country: '中国',
+    image: 'https://images.unsplash.com/photo-1546702312-73c2f1127c68?q=80&w=1000&auto=format&fit=crop',
+    tags: ['#美食', '#休闲', '#大熊猫'],
+    explorers: '38万+'
+  },
+  {
+    id: 'xian',
+    name: '西安',
+    country: '中国',
+    image: 'https://images.unsplash.com/photo-1524316212875-f855e3e34a62?q=80&w=1000&auto=format&fit=crop',
+    tags: ['#历史', '#文化', '#古都'],
+    explorers: '32万+'
+  },
+  {
     id: 'bali',
     name: '巴厘岛',
     country: '印尼',
     image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1000&auto=format&fit=crop',
     tags: ['#海岛', '#文化', '#自然'],
-    explorers: '1.2万',
-    is_trending: true
-  },
-  {
-    id: 'paris',
-    name: '巴黎',
-    country: '法国',
-    image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1000&auto=format&fit=crop',
-    tags: ['#浪漫', '#艺术', '#都市'],
-    explorers: '9.8k'
+    explorers: '1.2万'
   },
   {
     id: 'tokyo',
@@ -26,30 +51,6 @@ export const DESTINATIONS: Destination[] = [
     tags: ['#都市', '#美食', '#文化'],
     explorers: '2.5万',
     is_trending: true
-  },
-  {
-    id: 'santorini',
-    name: '圣托里尼',
-    country: '希腊',
-    image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=80&w=1000&auto=format&fit=crop',
-    tags: ['#海岛', '#浪漫', '#自然'],
-    explorers: '8.2k'
-  },
-  {
-    id: 'kyoto',
-    name: '京都',
-    country: '日本',
-    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1000&auto=format&fit=crop',
-    tags: ['#文化', '#历史', '#自然'],
-    explorers: '1.1万'
-  },
-  {
-    id: 'dubai',
-    name: '迪拜',
-    country: '阿联酋',
-    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1000&auto=format&fit=crop',
-    tags: ['#奢华', '#现代', '#都市'],
-    explorers: '1.5万'
   }
 ];
 

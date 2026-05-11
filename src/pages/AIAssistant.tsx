@@ -104,8 +104,8 @@ const AIAssistant: React.FC = () => {
       </div>
 
       {/* Input Area */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent">
-        <div className="max-w-md mx-auto flex items-center gap-3 bg-white border border-slate-200 rounded-full px-6 py-3 shadow-xl focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
+      <div className="shrink-0 p-6 bg-white border-t border-slate-100 pb-10">
+        <div className="max-w-md mx-auto flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-full px-6 py-3 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/10 transition-all shadow-sm">
           <input 
             type="text" 
             placeholder="告诉 AI 您的想法..." 
