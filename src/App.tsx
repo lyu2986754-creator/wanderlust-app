@@ -72,6 +72,19 @@ export default function App() {
     }
   };
 
+  const handleAddComment = async (content: string) => {
+    if (!user) return;
+    try {
+      await commentService.createComment({
+        content,
+        author_id: user.id
+      });
+      // 实时订阅会自动处理列表更新，或者我们手动刷新
+    } catch (error) {
+      console.error('评论失败:', error);
+    }
+  };
+
   const handlePostCreated = async (newPost: Partial<Post>) => {
     if (!user) {
       alert('请先登录后再发布内容');
@@ -115,7 +128,7 @@ export default function App() {
               <Routes>
               <Route path="/" element={<Home posts={appPosts} />} />
               <Route path="/explore" element={<Explore />} />
-              <Route path="/community" element={<Community posts={appPosts} onOpenShare={() => setIsShareModalOpen(true)} />} />
+              <Route path="/community" element={<Community posts={appPosts} onOpenShare={() => setIsShareModalOpen(true)} onPostCreated={handlePostCreated} />} />
                 <Route path="/profile" element={<Profile user={user} posts={appPosts} onLogout={handleLogout} />} />
                 <Route path="/auth" element={user ? <Navigate to="/profile" /> : <Auth onLogin={handleLogin} />} />
                 <Route path="/post/:id" element={<PostDetail posts={appPosts} onAddComment={handleAddComment} />} />
