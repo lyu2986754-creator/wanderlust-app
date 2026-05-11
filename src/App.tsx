@@ -26,14 +26,13 @@ export default function App() {
 
   useEffect(() => {
     const initApp = async () => {
-      setLoading(true);
       try {
-        // 1. Check Auth Status
-        const profile = await authService.getCurrentProfile();
+        // 尝试获取用户信息
+        const profile = await authService.getCurrentProfile().catch(() => null);
         if (profile) setUser(profile);
 
-        // 2. Fetch Posts
-        const fetchedPosts = await postService.getPosts();
+        // 获取帖子
+        const fetchedPosts = await postService.getPosts().catch(() => []);
         if (fetchedPosts && fetchedPosts.length > 0) {
           setAppPosts(fetchedPosts);
         }
@@ -96,8 +95,13 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
+      <div className="h-screen w-screen bg-slate-100 flex items-center justify-center p-0 sm:p-4">
+        <div className="w-full max-w-[430px] h-full sm:h-[92vh] bg-white relative shadow-[0_0_100px_rgba(0,0,0,0.1)] sm:rounded-[3rem] flex items-center justify-center border border-slate-200/50">
+          <div className="flex flex-col items-center gap-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <p className="text-slate-400 text-sm font-medium animate-pulse">正在准备旅程...</p>
+          </div>
+        </div>
       </div>
     );
   }
