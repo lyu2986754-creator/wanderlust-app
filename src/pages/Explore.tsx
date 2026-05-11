@@ -107,9 +107,12 @@ const Explore: React.FC = () => {
         <div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/40 transition-all" />
         <h2 className="text-white font-display text-3xl font-black italic tracking-tighter mb-4 leading-tight">获取个性化<br />旅行建议</h2>
         <p className="text-slate-400 text-sm leading-relaxed mb-8">告诉我们您的偏好，AI 将为您定制专属的全球探索线路。</p>
-        <button className="bg-white text-slate-900 px-8 py-4 rounded-2xl font-display font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl">
+        <Link 
+          to="/ai-assistant"
+          className="inline-block bg-white text-slate-900 px-8 py-4 rounded-2xl font-display font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl"
+        >
           开启 AI 规划
-        </button>
+        </Link>
       </section>
     </div>
   );

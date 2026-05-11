@@ -13,6 +13,7 @@ import Auth from './pages/Auth';
 import PostDetail from './pages/PostDetail';
 import DestinationDetail from './pages/DestinationDetail';
 import Explore from './pages/Explore';
+import AIAssistant from './pages/AIAssistant';
 
 // Components
 import BottomNav from './components/BottomNav';
@@ -98,8 +99,9 @@ export default function App() {
                 <Route path="/profile" element={<Profile user={user} posts={appPosts} onLogout={handleLogout} />} />
                 <Route path="/auth" element={user ? <Navigate to="/profile" /> : <Auth onLogin={handleLogin} />} />
                 <Route path="/post/:id" element={<PostDetail posts={appPosts} onAddComment={handleAddComment} />} />
-              <Route path="/destination/:id" element={<DestinationDetail />} />
-              <Route path="*" element={<Navigate to="/" />} />
+                <Route path="/destination/:id" element={<DestinationDetail />} />
+                <Route path="/ai-assistant" element={<AIAssistant />} />
+                <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </AnimatePresence>
           </div>

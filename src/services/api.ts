@@ -54,6 +54,26 @@ export const authService = {
   }
 };
 
+export const aiService = {
+  // 发送消息给 AI 助手
+  async sendMessage(messages: { role: 'user' | 'assistant', content: string }[]) {
+    const response = await fetch('/api/ai/plan', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ messages }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'AI 响应失败');
+    }
+
+    return await response.json();
+  }
+};
+
 export const postService = {
   // 获取所有帖子（带分页和过滤）
   async getPosts(page = 1, pageSize = 10, filterType?: string) {
