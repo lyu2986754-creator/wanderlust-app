@@ -2,16 +2,15 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Gemini AI Setup
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+// DeepSeek AI Setup (OpenAI Compatible)
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || '';
+const DEEPSEEK_BASE_URL = "https://api.deepseek.com";
 
 // Supabase Client Setup
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -108,19 +107,34 @@ app.post('/api/ai/plan', async (req, res) => {
       return res.status(400).json({ error: 'Invalid messages format' });
     }
 
-    // 提取最后一条用户消息
-    const userMessage = messages[messages.length - 1].content;
+    // 系统提示词
+    const systemMessage = {
+      role: "system",
+      content: "你是一位专业的全球旅行规划师。请根据用户的需求，为他们提供详细、有趣且具有可操作性的旅行计划，包括目的地建议、行程安排、美食推荐和实用贴士。请使用友好且富有感染力的中文。"
+    };
 
-    // 系统提示词，引导 AI 成为旅行专家
-    const systemPrompt = "你是一位专业的全球旅行规划师。请根据用户的需求，为他们提供详细、有趣且具有可操作性的旅行计划，包括目的地建议、行程安排、美食推荐和实用贴士。请使用友好且富有感染力的语言。";
-    
-    const result = await model.generateContent([systemPrompt, userMessage]);
-    const response = await result.response;
-    const text = response.text();
+    const response = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "deepseek-chat",
+        messages: [systemMessage, ...messages.map((m: any) => ({ role: m.role, content: m.content }))],
+        stream: false
+      })
+    });
 
-    res.json({ content: text });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || 'AI 接口请求失败');
+    }
+
+    const data = await response.json();
+    res.json({ content: data.choices[0].message.content });
   } catch (error: any) {
-    console.error('Gemini API Error:', error);
+    console.error('AI API Error:', error);
     res.status(500).json({ error: 'AI 助手暂时无法响应，请稍后再试' });
   }
 });

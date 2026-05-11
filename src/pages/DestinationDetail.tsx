@@ -71,30 +71,37 @@ const DestinationDetail: React.FC = () => {
           <button 
             onClick={() => {
               const query = encodeURIComponent(dest.name + ' ' + dest.country);
-              const googleMapsAppUrl = `comgooglemaps://?q=${query}`;
-              const googleMapsWebUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
-              const downloadUrl = 'https://www.google.com/maps/about/download/';
+              const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+              
+              if (isIOS) {
+                // 苹果手机：尝试唤起苹果地图
+                window.location.href = `maps://?q=${query}`;
+              } else {
+                // 非苹果手机：尝试唤起高德地图
+                const amapAppUrl = `androidamap://keywordNavi?sourceApplication=wanderlust&keyword=${query}&style=2`;
+                const amapWebUrl = `https://uri.amap.com/search?keyword=${query}`;
+                const amapDownloadUrl = 'https://www.amap.com/download';
 
-              // 尝试唤起 App
-              const start = Date.now();
-              window.location.href = googleMapsAppUrl;
+                const start = Date.now();
+                window.location.href = amapAppUrl;
 
-              // 如果 2 秒内没有跳出网页，说明没装 App，跳转到下载页或 Web 版
-              setTimeout(() => {
-                if (Date.now() - start < 2500) {
-                  const confirmDownload = window.confirm('检测到您可能未安装谷歌地图 App，是否前往下载页面？');
-                  if (confirmDownload) {
-                    window.open(downloadUrl, '_blank');
-                  } else {
-                    window.open(googleMapsWebUrl, '_blank');
+                // 如果 2 秒内没有跳出网页，说明没装高德地图
+                setTimeout(() => {
+                  if (Date.now() - start < 2500) {
+                    const confirmDownload = window.confirm('检测到您未安装高德地图 App，是否前往下载？');
+                    if (confirmDownload) {
+                      window.open(amapDownloadUrl, '_blank');
+                    } else {
+                      window.open(amapWebUrl, '_blank');
+                    }
                   }
-                }
-              }, 2000);
+                }, 2000);
+              }
             }}
             className="w-full bg-slate-900 text-white p-5 rounded-[2rem] font-display font-bold flex items-center justify-center gap-3 hover:bg-slate-800 transition-all active:scale-[0.98] shadow-xl"
           >
             <Navigation size={22} fill="currentColor" />
-            <span>谷歌地图导航 & 开启旅程</span>
+            <span>开启智能导航 & 开启旅程</span>
           </button>
         </div>
 
