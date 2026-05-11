@@ -1,14 +1,43 @@
-import React from 'react';
-import { Search, Plus, Heart, MessageCircle, Star } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Plus, Heart, MessageCircle, Star, X, Image as ImageIcon, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Post } from '../types';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface CommunityProps {
   posts: Post[];
   onOpenShare: () => void;
+  onPostCreated?: (newPost: Partial<Post>) => void;
 }
 
-const Community: React.FC<CommunityProps> = ({ posts, onOpenShare }) => {
+const Community: React.FC<CommunityProps> = ({ posts, onOpenShare, onPostCreated }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newPostTitle, setNewPostTitle] = useState('');
+  const [newPostContent, setNewPostContent] = useState('');
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const urls = Array.from(e.target.files).map(file => URL.createObjectURL(file));
+      setSelectedImages([...selectedImages, ...urls]);
+    }
+  };
+
+  const handlePublish = () => {
+    if (onPostCreated) {
+      onPostCreated({
+        title: newPostTitle,
+        content: newPostContent,
+        image: selectedImages[0] || 'https://images.unsplash.com/photo-1501785888041-af3ef285b470',
+        type: 'guide',
+        location: '当前位置'
+      });
+    }
+    setIsModalOpen(false);
+    setNewPostTitle('');
+    setNewPostContent('');
+    setSelectedImages([]);
+  };
   return (
     <div className="flex flex-col gap-8 pb-32 pt-4 px-5 relative min-h-screen bg-slate-50/30">
       <header className="flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-40 py-2 -mx-5 px-5 border-b border-slate-50">

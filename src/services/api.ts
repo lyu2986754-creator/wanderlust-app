@@ -2,13 +2,25 @@ import { supabase } from '../lib/supabaseClient';
 import { Post, Comment, User } from '../types';
 
 export const authService = {
-  // 注册
+  // 注册新用户
   async signUp(email: string, password: string, name: string) {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { name }
+        data: { name, avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330' }
+      }
+    });
+    if (error) throw error;
+    return data;
+  },
+
+  // 谷歌第三方登录
+  async signInWithGoogle() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin
       }
     });
     if (error) throw error;

@@ -73,9 +73,25 @@ export default function App() {
     }
   };
 
-  const handleAddComment = async (content: string) => {
-    // Logic for adding comment
-    console.log('Adding comment:', content);
+  const handlePostCreated = async (newPost: Partial<Post>) => {
+    if (!user) {
+      alert('请先登录后再发布内容');
+      return;
+    }
+
+    try {
+      const createdPost = await postService.createPost({
+        ...newPost,
+        author_id: user.id,
+        author: {
+          name: user.name,
+          avatar: user.avatar
+        }
+      });
+      setAppPosts(prev => [createdPost, ...prev]);
+    } catch (error) {
+      console.error('发布失败:', error);
+    }
   };
 
   if (loading) {
