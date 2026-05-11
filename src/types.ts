@@ -1,3 +1,12 @@
+export interface Attraction {
+  id: string;
+  destination_id: string;
+  name: string;
+  image: string;
+  description: string;
+  info?: string;
+}
+
 export interface Destination {
   id: string;
   name: string;
@@ -6,6 +15,8 @@ export interface Destination {
   tags: string[];
   explorers: string;
   is_trending?: boolean;
+  description?: string; // 深度攻略 Markdown
+  attractions?: Attraction[];
   created_at?: string;
 }
 

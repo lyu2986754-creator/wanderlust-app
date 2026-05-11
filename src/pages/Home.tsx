@@ -9,6 +9,18 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ posts }) => {
+  const [searchQuery, setSearchQuery] = React.useState('');
+  
+  const filteredDestinations = DESTINATIONS.filter(dest => {
+    const query = searchQuery.toLowerCase();
+    if (query === '中国') {
+      return dest.country === '中国';
+    }
+    return dest.name.toLowerCase().includes(query) || 
+           dest.country.toLowerCase().includes(query) ||
+           dest.tags.some(tag => tag.toLowerCase().includes(query));
+  });
+
   return (
     <div className="flex flex-col gap-8 pb-32 pt-4 px-5">
       <header className="flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-40 py-2 -mx-5 px-5 border-b border-slate-50">
@@ -26,7 +38,9 @@ const Home: React.FC<HomeProps> = ({ posts }) => {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-accent transition-colors" size={20} />
           <input 
             type="text" 
-            placeholder="搜索你想去的地方..." 
+            placeholder="搜索你想去的地方（如：南昌、中国）..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-slate-50 border border-slate-200 focus:border-accent focus:ring-4 focus:ring-accent/10 rounded-2xl py-4 pl-12 pr-4 font-sans text-sm transition-all text-slate-800 placeholder-slate-400 outline-none"
           />
         </div>
@@ -34,29 +48,43 @@ const Home: React.FC<HomeProps> = ({ posts }) => {
 
       <section className="flex flex-col gap-5">
         <div className="flex justify-between items-center">
-          <h3 className="font-display text-xl font-bold text-slate-900">热门目的地</h3>
+          <h3 className="font-display text-xl font-bold text-slate-900">
+            {searchQuery.toLowerCase() === '中国' ? '中国热门城市导览' : searchQuery ? `关于 "${searchQuery}" 的结果` : '热门目的地'}
+          </h3>
           <Link to="/explore" className="text-accent text-[10px] font-bold uppercase tracking-widest hover:underline">查看全部</Link>
         </div>
         <div className="flex gap-4 overflow-x-auto -mx-5 px-5 pb-4 no-scrollbar">
-          {DESTINATIONS.map((dest: Destination) => (
-            <Link 
-              key={dest.id}
-              to={`/destination/${dest.id}`}
-              className="relative min-w-[200px] h-[280px] rounded-[2.5rem] overflow-hidden group shadow-lg hover:shadow-2xl transition-all"
-            >
-              <img src={dest.image} alt={dest.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6">
-                <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest mb-1">{dest.country}</p>
-                <h4 className="text-white font-display text-xl font-bold">{dest.name}</h4>
-              </div>
-              {dest.is_trending && (
-                <div className="absolute top-6 left-6 px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 rounded-full">
-                  <span className="text-[8px] font-bold text-white uppercase tracking-tighter">🔥 Trending</span>
+          {filteredDestinations.length > 0 ? (
+            filteredDestinations.map((dest: Destination) => (
+              <Link 
+                key={dest.id}
+                to={`/destination/${dest.id}`}
+                className="relative min-w-[240px] h-[320px] rounded-[2.5rem] overflow-hidden group shadow-lg hover:shadow-2xl transition-all"
+              >
+                <img src={dest.image} alt={dest.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                <div className="absolute bottom-8 left-8 right-8">
+                  <p className="text-[10px] font-bold text-white/70 uppercase tracking-[0.2em] mb-1">{dest.country}</p>
+                  <h4 className="text-white font-display text-2xl font-bold mb-2">{dest.name}</h4>
+                  <div className="flex gap-2">
+                    {dest.tags.slice(0, 2).map(tag => (
+                      <span key={tag} className="text-[8px] font-bold text-white/40 uppercase tracking-tighter">{tag}</span>
+                    ))}
+                  </div>
                 </div>
-              )}
-            </Link>
-          ))}
+                {dest.is_trending && (
+                  <div className="absolute top-8 left-8 px-4 py-1.5 bg-white/20 backdrop-blur-md border border-white/30 rounded-full">
+                    <span className="text-[8px] font-bold text-white uppercase tracking-tighter">🔥 Trending</span>
+                  </div>
+                )}
+              </Link>
+            ))
+          ) : (
+            <div className="py-10 px-4 flex flex-col gap-2">
+              <p className="text-slate-400 text-sm font-medium">暂无有关此城市的攻略内容</p>
+              <p className="text-slate-300 text-[10px] uppercase tracking-widest">试试搜索 "中国" 或 "南昌"</p>
+            </div>
+          )}
         </div>
       </section>
 

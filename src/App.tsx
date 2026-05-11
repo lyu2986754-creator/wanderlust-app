@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { postService, authService, commentService } from './services/api';
+import { supabase } from './lib/supabaseClient';
 import { Post, User, Destination } from './types';
 import { POSTS } from './constants';
 
@@ -45,6 +46,16 @@ export default function App() {
 
     initApp();
 
+    // 监听 Auth 状态变化（处理 Google 登录等回调）
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        const profile = await authService.getCurrentProfile();
+        if (profile) setUser(profile);
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null);
+      }
+    });
+
     // 3. Realtime Subscription
     const subscription = postService.subscribeToPosts((payload) => {
       if (payload.eventType === 'INSERT') {
@@ -56,6 +67,7 @@ export default function App() {
 
     return () => {
       subscription.unsubscribe();
+      authListener.subscription.unsubscribe();
     };
   }, []);
 

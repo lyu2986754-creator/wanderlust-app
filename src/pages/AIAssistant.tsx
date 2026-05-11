@@ -12,7 +12,7 @@ interface Message {
 const AIAssistant: React.FC = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: '您好！我是您的 AI 旅行规划师。我可以为您制定详细的行程、推荐地道美食或提供避坑指南。您想去哪里探索？' }
+    { role: 'assistant', content: '您好！我是您的 AI 旅行规划师。我可以为您制定详细的行程建议、推荐地道美食或提供避坑指南。您想去哪里探索？' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -35,11 +35,13 @@ const AIAssistant: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // 这里的 /api/ai/plan 会被 vercel.json 映射到后端
       const response = await aiService.sendMessage([...messages, userMessage]);
       const aiMessage: Message = { role: 'assistant', content: response.content };
       setMessages(prev => [...prev, aiMessage]);
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: '抱歉，我暂时无法连接到大脑，请检查您的 API Key 配置。' }]);
+    } catch (error: any) {
+      console.error('AI Error:', error);
+      setMessages(prev => [...prev, { role: 'assistant', content: `抱歉，我现在有点忙 (${error.message})。请检查您的 DeepSeek API Key 是否配置正确。` }]);
     } finally {
       setIsLoading(false);
     }
@@ -53,16 +55,19 @@ const AIAssistant: React.FC = () => {
           <ArrowLeft size={24} />
         </button>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white">
-            <Sparkles size={18} />
+          <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white shadow-lg">
+            <Sparkles size={20} className="text-blue-400" />
           </div>
-          <h1 className="font-display font-black text-lg tracking-tighter">AI 智能导游</h1>
+          <div>
+            <h1 className="font-display font-black text-lg tracking-tighter leading-none">AI 智能规划师</h1>
+            <span className="text-[8px] font-bold text-blue-500 uppercase tracking-widest">DeepSeek Powered</span>
+          </div>
         </div>
         <div className="w-10" />
       </header>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar pb-32">
         {messages.map((msg, index) => (
           <motion.div 
             initial={{ opacity: 0, y: 10 }}

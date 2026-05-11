@@ -45,10 +45,12 @@ const DestinationDetail: React.FC = () => {
       <div className="px-8 -mt-10 relative z-10">
         <div className="bg-white rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.06)] flex flex-col gap-10 border border-slate-50">
           <div className="flex flex-col gap-5">
-            <h2 className="font-display text-2xl font-bold text-slate-900 border-l-4 border-slate-900 pl-4">目的地概览</h2>
-            <p className="font-sans text-slate-500 text-[15px] leading-relaxed text-justify">
-              探访{dest.name}，探索这片充满魅力的土地。无论您是在寻找宁静的避难所，还是充满活力的都市体验，这里都能满足您的所有期待。从历史悠久的建筑到现代感十足的地标，每一处景色都值得停下脚步细细品味。
-            </p>
+            <h2 className="font-display text-2xl font-bold text-slate-900 border-l-4 border-slate-900 pl-4">保姆级攻略</h2>
+            <div className="prose prose-slate max-w-none">
+              <div className="font-sans text-slate-600 text-[15px] leading-relaxed whitespace-pre-wrap">
+                {dest.description || `探访${dest.name}，探索这片充满魅力的土地。无论您是在寻找宁静的避难所，还是充满活力的都市体验，这里都能满足您的所有期待。`}
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 pb-4">
@@ -111,14 +113,19 @@ const DestinationDetail: React.FC = () => {
             <button className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-1">查看地图 <ArrowRight size={14} /></button>
           </div>
           <div className="flex flex-col gap-6">
-            {[1, 2].map(i => (
-              <div key={i} className="group relative rounded-[2rem] overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all cursor-pointer">
-                <div className="h-44 w-full overflow-hidden">
-                  <img src={dest.image} alt="" className="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105" />
+            {(dest.attractions || [1, 2]).map((attr: any, i: number) => (
+              <div key={attr.id || i} className="group relative rounded-[2rem] overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                <div className="h-56 w-full overflow-hidden">
+                  <img src={attr.image || dest.image} alt="" className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105" />
                 </div>
                 <div className="p-6">
-                  <h4 className="font-display text-lg font-bold mb-1 text-slate-800">标志性胜地 #{i}</h4>
-                  <p className="text-slate-400 text-xs leading-relaxed uppercase font-bold tracking-widest">历史遗迹 • 徒步体验</p>
+                  <h4 className="font-display text-lg font-bold mb-1 text-slate-800">{attr.name || `标志性胜地 #${i+1}`}</h4>
+                  <p className="text-slate-500 text-xs leading-relaxed mb-3">{attr.description || '历史遗迹 • 徒步体验'}</p>
+                  {attr.info && (
+                    <div className="bg-slate-50 p-3 rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                      {attr.info}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

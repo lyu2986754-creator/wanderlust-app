@@ -17,8 +17,24 @@ CREATE TABLE destinations (
   tags TEXT[],
   explorers TEXT,
   is_trending BOOLEAN DEFAULT FALSE,
+  description TEXT, -- 存储详细攻略（Markdown 格式）
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
+
+-- Create Attractions Table (必打卡景点)
+CREATE TABLE attractions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  destination_id UUID REFERENCES destinations(id) ON DELETE CASCADE NOT NULL,
+  name TEXT NOT NULL,
+  image TEXT,
+  description TEXT,
+  info TEXT, -- 开放时间、门票等信息
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- Enable RLS
+ALTER TABLE attractions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Attractions are viewable by everyone." ON attractions FOR SELECT USING (true);
 
 -- Create Posts Table
 CREATE TABLE posts (

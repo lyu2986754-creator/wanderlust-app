@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { ArrowLeft, User as UserIcon, Mail, Lock, Chrome } from 'lucide-react';
+import { ArrowLeft, User as UserIcon, Mail, Lock, Chrome, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { User } from '../types';
+import { authService } from '../services/api';
 
 interface AuthProps {
   onLogin: (user: User) => void;
@@ -14,25 +15,43 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulation: Treat any valid-ish input as success
-    const mockUser: User = {
-      id: 'u-' + Math.random().toString(36).substr(2, 9),
-      name: name || (mode === 'login' ? '路人甲' : '新探险者'),
-      email: email,
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop',
-      level: '青铜探险家',
-      stats: {
-        footprints: 0,
-        followers: 0,
-        likes: 0
-      },
-      created_at: new Date().toISOString()
-    };
-    onLogin(mockUser);
-    navigate('/profile');
+    setIsLoading(true);
+    setError('');
+
+    try {
+      if (mode === 'register') {
+        await authService.signUp(email, password, name);
+        alert('注册成功！请查收邮件确认您的账号，然后尝试登录。');
+        setMode('login');
+      } else {
+        const { data, error } = await authService.signIn(email, password);
+        if (error) throw error;
+        
+        // 获取完整的用户 profile
+        const profile = await authService.getCurrentProfile();
+        if (profile) {
+          onLogin(profile);
+          navigate('/profile');
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || '操作失败，请重试');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await authService.signInWithGoogle();
+    } catch (err: any) {
+      setError('谷歌登录启动失败');
+    }
   };
 
   return (
@@ -58,6 +77,12 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        {error && (
+          <div className="bg-rose-50 border border-rose-100 p-4 rounded-2xl text-rose-500 text-xs font-bold flex items-center gap-2">
+            <span className="w-1.5 h-1.5 bg-rose-500 rounded-full" />
+            {error}
+          </div>
+        )}
         {mode === 'register' && (
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-2">姓名</label>
@@ -107,8 +132,10 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
 
         <button 
           type="submit"
-          className="w-full bg-slate-900 text-white p-5 rounded-[2rem] font-display font-black text-lg tracking-tight shadow-xl hover:bg-slate-800 transition-all active:scale-[0.98] mt-4"
+          disabled={isLoading}
+          className="w-full bg-slate-900 text-white p-5 rounded-[2rem] font-display font-black text-lg tracking-tight shadow-xl hover:bg-slate-800 transition-all active:scale-[0.98] mt-4 flex items-center justify-center gap-2"
         >
+          {isLoading && <Loader2 className="animate-spin" size={20} />}
           {mode === 'login' ? '立即登录' : '创建账户'}
         </button>
       </form>
@@ -121,11 +148,11 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
         </div>
 
         <button 
-          onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
+          onClick={handleGoogleLogin}
           className="w-full bg-white border border-slate-100 p-4 rounded-[2rem] font-display font-bold text-sm tracking-tight shadow-sm flex items-center justify-center gap-3 hover:bg-slate-50 transition-all active:scale-[0.98]"
         >
           <Chrome size={20} className="text-rose-500" />
-          <span>使用 Google 账号继续</span>
+          <span>使用 Google 账号验证并登录</span>
         </button>
 
         <p className="text-sm text-slate-400 font-medium">
