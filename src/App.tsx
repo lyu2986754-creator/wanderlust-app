@@ -21,8 +21,8 @@ import BottomNav from './components/BottomNav';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
-  const [appPosts, setAppPosts] = useState<Post[]>(POSTS);
-  const [loading, setLoading] = useState(false);
+  const [appPosts, setAppPosts] = useState<Post[]>([]); // 初始化为空，从数据库读取
+  const [loading, setLoading] = useState(true); // 默认开启加载
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   useEffect(() => {
@@ -57,11 +57,23 @@ export default function App() {
     });
 
     // 3. Realtime Subscription
-    const subscription = postService.subscribeToPosts((payload) => {
+    const subscription = postService.subscribeToPosts(async (payload) => {
+      console.log('Realtime update received:', payload);
       if (payload.eventType === 'INSERT') {
-        setAppPosts(prev => [payload.new as Post, ...prev]);
+        // 插入时，为了获取作者详情，我们需要重新查询一下这条新帖子
+        const { data: newPostWithAuthor, error } = await supabase
+          .from('posts')
+          .select('*, author:users(*)')
+          .eq('id', payload.new.id)
+          .single();
+        
+        if (!error && newPostWithAuthor) {
+          setAppPosts(prev => [newPostWithAuthor as Post, ...prev]);
+        }
       } else if (payload.eventType === 'UPDATE') {
         setAppPosts(prev => prev.map(p => p.id === payload.new.id ? { ...p, ...payload.new } : p));
+      } else if (payload.eventType === 'DELETE') {
+        setAppPosts(prev => prev.filter(p => p.id !== payload.old.id));
       }
     });
 
@@ -106,15 +118,13 @@ export default function App() {
     try {
       const createdPost = await postService.createPost({
         ...newPost,
-        author_id: user.id,
-        author: {
-          name: user.name,
-          avatar: user.avatar
-        }
+        author_id: user.id
       });
-      setAppPosts(prev => [createdPost, ...prev]);
-    } catch (error) {
+      // 注意：这里不需要手动 setAppPosts，因为实时订阅会自动监听到插入并更新 UI
+      console.log('Post created successfully:', createdPost);
+    } catch (error: any) {
       console.error('发布失败:', error);
+      throw error;
     }
   };
 

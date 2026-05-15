@@ -107,23 +107,23 @@ export const postService = {
     return data as Post[];
   },
 
-  // 上传图片到 Storage
+  // 上传图片到 Storage 并获取公开 URL
   async uploadImage(file: File) {
     const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}.${fileExt}`;
-    const filePath = `post-images/${fileName}`;
+    const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
+    const filePath = `posts/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage
+    const { error: uploadError, data } = await supabase.storage
       .from('wanderlust-assets')
       .upload(filePath, file);
 
     if (uploadError) throw uploadError;
 
-    const { data } = supabase.storage
+    const { data: publicUrlData } = supabase.storage
       .from('wanderlust-assets')
       .getPublicUrl(filePath);
 
-    return data.publicUrl;
+    return publicUrlData.publicUrl;
   },
 
   // 获取单个帖子详情
@@ -138,12 +138,22 @@ export const postService = {
     return data as Post;
   },
 
-  // 创建新帖子
+  // 创建新帖子（写入数据库）
   async createPost(post: Partial<Post>) {
     const { data, error } = await supabase
       .from('posts')
-      .insert([post])
-      .select()
+      .insert([{
+        title: post.title,
+        content: post.content,
+        image: post.image,
+        author_id: post.author_id,
+        location: post.location,
+        type: post.type || 'guide',
+        tags: post.tags || [],
+        likes_count: 0,
+        comments_count: 0
+      }])
+      .select('*, author:users(*)')
       .single();
 
     if (error) throw error;

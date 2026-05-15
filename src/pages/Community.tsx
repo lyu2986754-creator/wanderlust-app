@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Plus, Heart, MessageCircle, Star, X, Image as ImageIcon, Send } from 'lucide-react';
+import { Search, Plus, Heart, MessageCircle, Star, X, Image as ImageIcon, Send, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Post } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
@@ -16,6 +16,8 @@ const Community: React.FC<CommunityProps> = ({ posts, onOpenShare, onPostCreated
   const [newPostContent, setNewPostContent] = useState('');
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const filteredPosts = posts.filter(post => 
     post.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -24,26 +26,49 @@ const Community: React.FC<CommunityProps> = ({ posts, onOpenShare, onPostCreated
   );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const urls = Array.from(e.target.files).map(file => URL.createObjectURL(file));
-      setSelectedImages([...selectedImages, ...urls]);
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setSelectedImages([url]);
     }
   };
 
-  const handlePublish = () => {
-    if (onPostCreated) {
-      onPostCreated({
-        title: newPostTitle,
-        content: newPostContent,
-        image: selectedImages[0] || 'https://images.unsplash.com/photo-1501785888041-af3ef285b470',
-        type: 'guide',
-        location: '江西南昌' // 默认位置，实际应由用户选择或自动定位
-      });
+  const handlePublish = async () => {
+    if (!newPostTitle || !newPostContent || isPublishing) return;
+    
+    setIsPublishing(true);
+    try {
+      let imageUrl = 'https://images.unsplash.com/photo-1501785888041-af3ef285b470';
+      
+      // 1. 如果有选择图片，先上传到 Storage
+      if (selectedFile) {
+        imageUrl = await postService.uploadImage(selectedFile);
+      }
+
+      // 2. 调用父组件传递的发布逻辑（写入数据库）
+      if (onPostCreated) {
+        await onPostCreated({
+          title: newPostTitle,
+          content: newPostContent,
+          image: imageUrl,
+          type: 'guide',
+          location: '江西南昌'
+        });
+      }
+
+      // 3. 重置状态
+      setIsModalOpen(false);
+      setNewPostTitle('');
+      setNewPostContent('');
+      setSelectedImages([]);
+      setSelectedFile(null);
+    } catch (error: any) {
+      console.error('发布失败:', error);
+      alert(`发布失败: ${error.message}`);
+    } finally {
+      setIsPublishing(false);
     }
-    setIsModalOpen(false);
-    setNewPostTitle('');
-    setNewPostContent('');
-    setSelectedImages([]);
   };
 
   return (
@@ -187,11 +212,11 @@ const Community: React.FC<CommunityProps> = ({ posts, onOpenShare, onPostCreated
               <div className="p-8 bg-white border-t border-slate-50">
                 <button 
                   onClick={handlePublish}
-                  disabled={!newPostTitle || !newPostContent}
+                  disabled={!newPostTitle || !newPostContent || isPublishing}
                   className="w-full bg-slate-900 text-white p-5 rounded-[2rem] font-display font-black text-lg tracking-tight shadow-xl hover:bg-slate-800 transition-all active:scale-[0.98] disabled:opacity-20 flex items-center justify-center gap-3"
                 >
-                  <Send size={20} />
-                  <span>立即发布</span>
+                  {isPublishing ? <Loader2 className="animate-spin" size={20} /> : <Send size={20} />}
+                  <span>{isPublishing ? '正在发布...' : '立即发布'}</span>
                 </button>
               </div>
             </motion.div>
