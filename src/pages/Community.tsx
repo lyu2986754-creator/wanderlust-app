@@ -148,7 +148,12 @@ const Community: React.FC<CommunityProps> = ({ posts, onOpenShare, onPostCreated
         )}
       </div>
 
-      <AnimatePresence>
+      <button 
+        onClick={() => setIsModalOpen(true)}
+        className="fixed bottom-28 right-6 bg-slate-900 text-white w-14 h-14 rounded-2xl shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-[60] border-4 border-white"
+      >
+        <Plus size={32} />
+      </button>
         {isModalOpen && (
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}

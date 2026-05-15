@@ -5,7 +5,7 @@ export const DESTINATIONS: Destination[] = [
     id: 'nanchang',
     name: '南昌',
     country: '中国',
-    image: 'https://images.unsplash.com/photo-1543080036-79178905389f?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1543080036-79178905389f?auto=format&fit=crop&q=60&w=800',
     tags: ['#红色记忆', '#赣菜美食', '#江南名楼'],
     explorers: '20万+',
     is_trending: true,
